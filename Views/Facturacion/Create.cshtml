@@ -1,0 +1,144 @@
+﻿@model SODERIA_I.ViewModels.CompraViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Facturación</h4>
+<hr />
+
+<form asp-action="Create" asp-controller="Facturacion" method="get">
+    <!-- Zona de filtro -->
+    <div class="form-group">
+        <label for="zonaFiltro">Seleccione una zona:</label>
+        <select id="zonaFiltro" class="form-control" onchange="filtrarClientesPorZona()">
+            <option value="">Seleccione una zona</option>
+            @foreach (var zona in Model.Clientes.Select(c => c.zona).Distinct())
+            {
+                <option value="@zona" selected="@(zona == Model.ZonaSeleccionada ? "selected" : null)">
+                    @zona
+                </option>
+            }
+        </select>
+    </div>
+
+    <!-- Dropdown para seleccionar cliente -->
+    <div class="form-group">
+        <label for="ClienteId">Seleccione un cliente:</label>
+        <select name="clienteId" class="form-control" id="clientesDropdown" onchange="this.form.submit()">
+            <option value="">Seleccione un cliente</option>
+            @foreach (var cliente in Model.Clientes)
+            {
+                <option value="@cliente.Id" data-zona="@cliente.zona"
+                        selected="@(cliente.Id == Model.ClienteIdSeleccionado ? "selected" : null)">
+                    @($"{cliente.nombre} {cliente.apellido}")
+                </option>
+            }
+        </select>
+    </div>
+</form>
+
+@if (Model.ComprasDelUltimoMes != null && Model.ComprasDelUltimoMes.Any())
+{
+    <h3>Compras del último mes</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Tipo de Compra</th>
+                <th>Cantidad</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                decimal montoTotal = 0; // Variable para calcular el monto total
+            }
+            @foreach (var compra in Model.ComprasDelUltimoMes)
+            {
+                decimal precio = 0;
+                switch (compra.TipoCompraId)
+                {
+                    case 1: // Bidón 12 litros
+                        precio = 100;
+                        break;
+                    case 2: // Bidón 20 litros
+                        precio = 150;
+                        break;
+                    case 3: // Sifón
+                        precio = 200;
+                        break;
+                }
+                decimal monto = precio * compra.Cantidad;
+                montoTotal += monto; // Sumar al monto total
+
+                <tr>
+                    <td>@compra.cliente.NombreCompleto</td> <!-- Nombre del cliente -->
+                    <td>
+                        @switch (compra.TipoCompraId)
+                        {
+                            case 1:
+                                <text>Bidón 12 litros</text>
+                                break;
+                            case 2:
+                                <text>Bidón 20 litros</text>
+                                break;
+                            case 3:
+                                <text>Sifón</text>
+                                break;
+                            default:
+                                <text>Desconocido</text>
+                                break;
+                        }
+                    </td> <!-- Tipo de compra -->
+                    <td>@(Convert.ToInt32(compra.Cantidad))</td> <!-- Cantidad -->
+                    <td>@compra.fecha.ToShortDateString()</td> <!-- Fecha -->
+                </tr>
+            }
+            <!-- Fila para el monto total -->
+            <tr>
+                <td colspan="3" class="text-right"><strong>Total a pagar:</strong></td>
+                <td><strong>@montoTotal.ToString("C")</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    var detalleComprasJson = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ComprasDelUltimoMes);
+    <!-- Campos ocultos para reutilizar datos en la factura digital -->
+    <input type="hidden" id="totalFactura" name="totalFactura" value="@montoTotal" />
+    <input type="hidden" id="detalleCompras" name="detalleCompras" value='@Newtonsoft.Json.JsonConvert.SerializeObject(Model.ComprasDelUltimoMes)' />
+
+    <a asp-controller="Facturacion" asp-action="GenerarFactura" asp-route-clienteId="@Model.ClienteIdSeleccionado" asp-route-totalFactura="@montoTotal" asp-route-detalleCompras='@Newtonsoft.Json.JsonConvert.SerializeObject(Model.ComprasDelUltimoMes)' class="btn btn-primary">
+        Descargar Factura
+    </a>
+}
+
+<script>
+    function calcularMonto() {
+        const tipoCompraDropdown = document.getElementById("TipoCompraId");
+        const tipoCompraSeleccionado = tipoCompraDropdown.options[tipoCompraDropdown.selectedIndex];
+        const precio = parseFloat(tipoCompraSeleccionado.getAttribute("data-precio"));
+        const cantidadInput = document.querySelector("[name='Cantidad']");
+        const cantidad = parseInt(cantidadInput.value) || 0;
+        const montoTotal = precio * cantidad;
+        const montoInput = document.querySelector("[name='Monto']");
+        montoInput.value = montoTotal.toFixed(2);
+    }
+
+    function filtrarClientesPorZona() {
+        var zonaSeleccionada = document.getElementById('zonaFiltro').value;
+        var clientesDropdown = document.getElementById('clientesDropdown');
+
+        for (var i = 0; i < clientesDropdown.options.length; i++) {
+            var option = clientesDropdown.options[i];
+            var zonaCliente = option.getAttribute('data-zona');
+
+            if (zonaSeleccionada === '' || zonaCliente === zonaSeleccionada) {
+                option.style.display = 'block';
+            } else {
+                option.style.display = 'none';
+            }
+        }
+    }
+</script>

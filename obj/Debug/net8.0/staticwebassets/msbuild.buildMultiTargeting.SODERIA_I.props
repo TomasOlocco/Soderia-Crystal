@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\SODERIA_I.props" />
+</Project>

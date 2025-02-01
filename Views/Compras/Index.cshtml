@@ -1,0 +1,84 @@
+@model IPagedList<SODERIA_I.Models.Compra>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model[0].fecha)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].cliente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].TipoCompraId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Cantidad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Monto)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <!-- Mostrar solo la fecha sin la hora -->
+                <td>
+                    @item.fecha.ToString("dd/MM/yyyy")
+                </td>
+                <!-- Combinar nombre y apellido en el mismo campo -->
+                <td>
+                    @($"{item.cliente.nombre} {item.cliente.apellido}")
+                </td>
+                <td>
+                    @switch (item.TipoCompraId)
+                    {
+                        case 1:
+                            <text>Bidón 12 litros</text>
+                            break;
+                        case 2:
+                            <text>Bidón 20 litros</text>
+                            break;
+                        case 3:
+                            <text>Sifón</text>
+                            break;
+                        default:
+                            <text>Desconocido</text>
+                            break;
+                    }
+                </td>
+                <!-- Convertir cantidad de decimal a entero -->
+                <td>
+                    @(Convert.ToInt32(item.Cantidad))
+                </td>
+                <td>
+                    @item.Monto.ToString("C")
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Controles de paginación -->
+<div>
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+</div>

@@ -1,0 +1,57 @@
+@model SODERIA_I.Models.Cliente
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Cliente</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post">
+            <div class="form-group">
+                <label asp-for="nombre"></label>
+                <input asp-for="nombre" class="form-control" />
+                <span asp-validation-for="nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="apellido"></label>
+                <input asp-for="apellido" class="form-control" />
+                <span asp-validation-for="apellido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="zona"></label>
+                <select asp-for="zona" class="form-control">
+                    <option value="">Seleccione una zona</option>
+                    @foreach (var zona in ViewBag.Zonas as List<string>)
+                    {
+                        <option value="@zona">@zona</option>
+                    }
+                </select>
+                <span asp-validation-for="zona" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Telefono" class="control-label">Teléfono</label>
+                <input asp-for="Telefono" class="form-control" placeholder="Ej: 3576576464 o +54 9 3576576464" />
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const telefonoInput = document.querySelector("#Telefono");
+
+        telefonoInput.addEventListener("input", function() {
+            // Reemplaza espacios y guiones en tiempo real
+            this.value = this.value.replace(/[-\s()]/g, "");
+        });
+    });
+</script>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
