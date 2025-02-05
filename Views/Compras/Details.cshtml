@@ -1,54 +1,55 @@
 @model SODERIA_I.Models.Compra
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles";
 }
 
-<h1>Details</h1>
-
-<div>
-    <h4>Compra</h4>
+<div class="container mb-5 m-3">
+    <!-- Agregué mb-5 para margen inferior -->
+    <h1>Detalles de la compra</h1>
+    <h5>Información de la compra</h5>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.fecha)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.fecha)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.cliente)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.cliente.apellido)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TipoCompraId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TipoCompraId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cantidad)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cantidad)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Monto)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Monto)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ClienteNombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ClienteNombre)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Campo Fecha -->
+            <div class="form-group mb-3">
+                <label asp-for="fecha" class="control-label"></label>
+                <input asp-for="fecha" class="form-control" readonly />
+            </div>
+
+            <!-- Campo Tipo de Compra -->
+            <div class="form-group mb-3">
+                <label asp-for="TipoCompraId" class="control-label"></label>
+                <input asp-for="TipoCompraId" class="form-control" readonly />
+            </div>
+
+            <!-- Campo Cantidad -->
+            <div class="form-group mb-3">
+                <label asp-for="Cantidad" class="control-label"></label>
+                <input asp-for="Cantidad" class="form-control" readonly />
+            </div>
+
+            <!-- Campo Monto -->
+            <div class="form-group mb-3">
+                <label asp-for="Monto" class="control-label"></label>
+                <input asp-for="Monto" class="form-control" readonly />
+            </div>
+
+            <!-- Campo Nombre Completo del Cliente -->
+            <div class="form-group mb-3">
+                <label asp-for="ClienteNombre" class="control-label"></label>
+                <input asp-for="ClienteNombre" class="form-control" readonly />
+            </div>
+
+            <hr />
+
+            <!-- Botones de acciones -->
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Editar</a>
+                <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>
+                <hr />
+            </div>
+        </div>
+    </div>
 </div>

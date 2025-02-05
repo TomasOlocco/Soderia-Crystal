@@ -317,3 +317,9 @@ C:\Users\Notebook\source\repos\SODERIA_I\obj\Debug\net8.0\refint\SODERIA_I.dll
 C:\Users\Notebook\source\repos\SODERIA_I\obj\Debug\net8.0\SODERIA_I.pdb
 C:\Users\Notebook\source\repos\SODERIA_I\obj\Debug\net8.0\SODERIA_I.genruntimeconfig.cache
 C:\Users\Notebook\source\repos\SODERIA_I\obj\Debug\net8.0\ref\SODERIA_I.dll
+C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\out\web.config
+C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\out\appsettings.Development.json
+C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\out\appsettings.json
+C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\out\SODERIA_I.deps.json
+C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\out\SODERIA_I.runtimeconfig.json
+C:\Users\Notebook\source\repos\SODERIA_I\obj\Debug\net8.0\SODERIA_I.sourcelink.json

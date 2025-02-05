@@ -38,11 +38,17 @@ namespace SODERIA_I.Controllers
                 {
                     tipoCompra = c.TipoCompraId == 1 ? "Bidón 12 litros" :
                                  c.TipoCompraId == 2 ? "Bidón 20 litros" :
-                                 c.TipoCompraId == 3 ? "Sifón" : "Desconocido",
+                                 c.TipoCompraId == 3 ? "Sifón" : 
+                                 c.TipoCompraId == 4 ? "12 litros (Reparto)" :
+                                 c.TipoCompraId == 5 ? "20 litros (Reparto)" :
+                                 c.TipoCompraId == 6 ? "Sifón (Reparto)" : "Desconocido" ,
                     cantidad = Convert.ToInt32(c.Cantidad),
-                    precio = c.TipoCompraId == 1 ? 100m :
-                             c.TipoCompraId == 2 ? 150m :
-                             c.TipoCompraId == 3 ? 200m : 0m
+                    precio = c.TipoCompraId == 1 ? 1500m :
+                             c.TipoCompraId == 2 ? 2500m :
+                             c.TipoCompraId == 3 ? 500m : 
+                             c.TipoCompraId == 4 ? 1700m :
+                             c.TipoCompraId == 5 ? 2800m :
+                             c.TipoCompraId == 6 ? 600 : 0m
                 })
                 .ToList();
 
@@ -61,7 +67,7 @@ namespace SODERIA_I.Controllers
                 Directory.CreateDirectory(folderPath);
 
             // Construir el nombre del archivo reemplazando espacios
-            var fileName = $"{clienteNombre.Replace(" ", "_")}_{DateTime.Now:MM_yy}.pdf";
+            var fileName = $"{clienteNombre.Replace(" ", "_")}_{DateTime.Now:MM_yyyy}.pdf";
             var filePath = Path.Combine(folderPath, fileName);
 
             // Guardar el PDF en la carpeta
@@ -176,7 +182,10 @@ namespace SODERIA_I.Controllers
     {
         new { Id = 1, Tipo = "Bidón 12 litros" },
         new { Id = 2, Tipo = "Bidón 20 litros" },
-        new { Id = 3, Tipo = "Sifón" }
+        new { Id = 3, Tipo = "Sifón" },
+        new { Id = 4, Tipo = "12 litros (Reparto)", Precio = 150},
+        new { Id = 5, Tipo = "20 litros (Reparto)", Precio = 250},
+        new { Id = 6, Tipo = "Sifón (Reparto)", Precio = 300}
     };
 
             return tiposCompra.FirstOrDefault(t => t.Id == tipoCompraId)?.Tipo ?? "Desconocido";

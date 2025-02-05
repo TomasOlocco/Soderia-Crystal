@@ -17,23 +17,33 @@ namespace SODERIA_I.Services
             {
                 container.Page(page =>
                 {
-                    page.Size(PageSizes.A4);
+                    page.Size(PageSizes.A5);
                     page.Margin(30);
-                    page.DefaultTextStyle(x => x.FontSize(12));
 
+                    // Aplicar fuente global para el documento
+                    page.DefaultTextStyle(x => x.FontFamily("Nunito Sans").FontSize(12));
+
+                    // Aplicar "Josefin Sans" al título
                     page.Header()
                         .AlignCenter()
-                        .Text("Factura Digital")
-                        .FontSize(20)
+                        .Text("Soderia Crystal")
+                        .FontSize(35)
+                        .FontFamily("Josefin Sans")
                         .Bold();
 
                     page.Content()
                         .Column(column =>
                         {
-                            column.Item().Text($"Cliente: {cliente}").FontSize(14).Bold();
-                            column.Item().Text($"Fecha: {DateTime.Now:dd/MM/yyyy}").FontSize(12);
+                            column.Item().PaddingTop(15);
+                            column.Item().Text("Factura digital").FontSize(10);
+                            column.Item().PaddingBottom(5);
+
+                            column.Item().Text($"Fecha: {DateTime.Now:dd/MM/yyyy}").FontSize(12).Bold();
+                            column.Item().Text($"Cliente: {cliente}").FontSize(12).Bold();
+                            column.Item().PaddingBottom(5);
 
                             column.Item().LineHorizontal(1);
+                            column.Item().PaddingBottom(5);
 
                             column.Item().Table(table =>
                             {
@@ -48,8 +58,9 @@ namespace SODERIA_I.Services
                                 {
                                     header.Cell().Text("Tipo de Compra").Bold();
                                     header.Cell().Text("Cantidad").Bold();
-                                    header.Cell().Text("Precio").Bold();
+                                    header.Cell().Text("Precio u/").Bold();
                                 });
+                                column.Item().PaddingBottom(5);
 
                                 foreach (var compra in compras)
                                 {
@@ -59,13 +70,19 @@ namespace SODERIA_I.Services
                                 }
                             });
 
+                            column.Item().PaddingBottom(10);
                             column.Item().LineHorizontal(1);
-                            column.Item().AlignRight().Text($"Total: {total:C}").FontSize(14).Bold();
+                            column.Item().PaddingTop(10);
+                            column.Item().AlignRight().Text($"Total: {total:C}").FontSize(16).Bold();
+                            column.Item().PaddingBottom(10);
+                            column.Item().Text("MercadoPago ALIAS:    SODA.CRYSTAL").FontSize(12);
+                            column.Item().Text("Titular:              Gustavo José Olocco").FontSize(12);
+                            column.Item().PaddingBottom(10);
                         });
 
                     page.Footer()
                         .AlignCenter()
-                        .Text("Gracias por su compra. - SODERIA_I");
+                        .Text("Muchas gracias por su compra. Soderia Crystal");
                 });
             });
 

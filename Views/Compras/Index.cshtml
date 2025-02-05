@@ -3,82 +3,99 @@
 @using X.PagedList;
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Compras";
 }
 
-<h1>Index</h1>
+<div class="container m-3 mb-5">
+    <h1>Compras</h1>
+    <hr />
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model[0].fecha)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].cliente)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].TipoCompraId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].Cantidad)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].Monto)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+    <!-- Botón para guardar una nueva compra -->
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Registrar compra</a>
+    </p>
+
+    <!-- Tabla de compras -->
+    <div class="table-responsive">
+        <!-- Hace que la tabla sea responsive -->
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model[0].fecha)</th>
+                    <th>@Html.DisplayNameFor(model => model[0].cliente)</th>
+                    <th>@Html.DisplayNameFor(model => model[0].TipoCompraId)</th>
+                    <th>@Html.DisplayNameFor(model => model[0].Cantidad)</th>
+                    <th>@Html.DisplayNameFor(model => model[0].Monto)</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <!-- Mostrar solo la fecha sin la hora -->
+                        <td>@item.fecha.ToString("dd/MM/yyyy")</td>
+
+                        <!-- Combinar nombre y apellido en el mismo campo -->
+                        <td>@($"{item.cliente.nombre} {item.cliente.apellido}")</td>
+
+                        <!-- Mostrar el tipo de compra -->
+                        <td>
+                            @switch (item.TipoCompraId)
+                            {
+                                case 1:
+                                    <text>Bidón 12 litros</text>
+                                    break;
+                                case 2:
+                                    <text>Bidón 20 litros</text>
+                                    break;
+                                case 3:
+                                    <text>Sifón</text>
+                                    break;
+                                case 4:
+                                    <text>Bidón 12 litros (Reparto)</text>
+                                    break;
+                                case 5:
+                                    <text>Bidón 20 litros (Reparto)</text>
+                                    break;
+                                case 6:
+                                    <text>Sifón (Reparto)</text>
+                                    break;
+                                default:
+                                    <text>Desconocido</text>
+                                    break;
+                            }
+                        </td>
+
+                        <!-- Convertir cantidad de decimal a entero -->
+                        <td>@(Convert.ToInt32(item.Cantidad))</td>
+
+                        <!-- Mostrar el monto formateado como moneda -->
+                        <td>@item.Monto.ToString("C")</td>
+
+                        <!-- Botones de acciones -->
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Editar</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Detalles</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Borrar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Controles de paginación -->
+    <div class="pagination-container mt-4">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }),
+                 new PagedListRenderOptions
         {
-            <tr>
-                <!-- Mostrar solo la fecha sin la hora -->
-                <td>
-                    @item.fecha.ToString("dd/MM/yyyy")
-                </td>
-                <!-- Combinar nombre y apellido en el mismo campo -->
-                <td>
-                    @($"{item.cliente.nombre} {item.cliente.apellido}")
-                </td>
-                <td>
-                    @switch (item.TipoCompraId)
-                    {
-                        case 1:
-                            <text>Bidón 12 litros</text>
-                            break;
-                        case 2:
-                            <text>Bidón 20 litros</text>
-                            break;
-                        case 3:
-                            <text>Sifón</text>
-                            break;
-                        default:
-                            <text>Desconocido</text>
-                            break;
-                    }
-                </td>
-                <!-- Convertir cantidad de decimal a entero -->
-                <td>
-                    @(Convert.ToInt32(item.Cantidad))
-                </td>
-                <td>
-                    @item.Monto.ToString("C")
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<!-- Controles de paginación -->
-<div>
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+            LiElementClasses = new[] { "page-item" },
+            PageClasses = new[] { "page-link" },
+            DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+            DisplayLinkToNextPage = PagedListDisplayMode.Always,
+            MaximumPageNumbersToDisplay = 4,
+            EllipsesFormat = "&#8230;"
+        })
+    </div>
 </div>

@@ -1,8 +1,17 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Página Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container text-center mt-5">
+    <!-- Agregué mt-5 para margen superior -->
+    <h1 class="display-3" style="font-family: Josefin Sans, serif;">Soderia Crystal</h1>
+    <hr class="w-60 mx-auto" /> <!-- Línea horizontal centrada y con un ancho del 60% -->
+    <p class="lead">Gestión automática de facturación.</p>
+
+    <!-- Botones de acceso rápido -->
+    <div class="mt-4">
+        <a asp-controller="Clientes" asp-action="Index" class="btn btn-outline-secondary btn-lg">Ver Clientes</a>
+        <a asp-controller="Compras" asp-action="Index" class="btn btn-primary btn-lg">Agregar Compra</a>
+        <a asp-controller="Facturacion" asp-action="Create" class="btn btn-danger btn-lg">Facturar</a>
+    </div>
 </div>

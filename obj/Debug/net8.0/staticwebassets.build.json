@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "BE4ENKnGHC1DgVXMM+W+dvxRU/fkpEGeCqFjZf427gM=",
+  "Hash": "ketIKJG5xq4DTZM6bpAn2EjlSEGaRYSFmQvcaPp1AcY=",
   "Source": "SODERIA_I",
   "BasePath": "_content/SODERIA_I",
   "Mode": "Default",
@@ -55,6 +55,25 @@
       "OriginalItemSpec": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\SODERIA_I.bundle.scp.css"
     },
     {
+      "Identity": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\bidon.png",
+      "SourceId": "SODERIA_I",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\",
+      "BasePath": "_content/SODERIA_I",
+      "RelativePath": "bidon.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\bidon.png"
+    },
+    {
       "Identity": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\css\\site.css",
       "SourceId": "SODERIA_I",
       "SourceType": "Discovered",
@@ -74,12 +93,12 @@
       "OriginalItemSpec": "wwwroot\\css\\site.css"
     },
     {
-      "Identity": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\facturas\\Juan_Rodriguez_01_25.pdf",
+      "Identity": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\facturas\\Juan_Perez_02_2025.pdf",
       "SourceId": "SODERIA_I",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\",
       "BasePath": "_content/SODERIA_I",
-      "RelativePath": "facturas/Juan_Rodriguez_01_25.pdf",
+      "RelativePath": "facturas/Juan_Perez_02_2025.pdf",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -90,7 +109,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\facturas\\Juan_Rodriguez_01_25.pdf"
+      "OriginalItemSpec": "wwwroot\\facturas\\Juan_Perez_02_2025.pdf"
     },
     {
       "Identity": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\favicon.ico",

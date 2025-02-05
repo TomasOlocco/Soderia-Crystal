@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SODERIA_I.Data;
 using SODERIA_I.Models;
 using SODERIA_I.ViewModels;
+using X.PagedList;
 using X.PagedList.Extensions;
 
 namespace SODERIA_I.Controllers
@@ -21,27 +22,30 @@ namespace SODERIA_I.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int? page)
+        public IActionResult Index(int? page)
         {
-            // Definir el número de elementos por página
-            int pageSize = 3; // Puedes ajustar este valor según tus necesidades
-            int pageNumber = (page ?? 1); // Si page es null, usar la página 1
+            int pageSize = 5;
+            int pageNumber = page ?? 1;
 
-            // Obtener las compras paginadas
-            var compras = _context.compras
-                .Include(c => c.cliente) // Incluir los datos del cliente
-                .Select(c => new Compra
-                {
-                    Id = c.Id,
-                    fecha = c.fecha,
-                    Cantidad = c.Cantidad,
-                    Monto = c.Monto,
-                    TipoCompraId = c.TipoCompraId,
-                    cliente = c.cliente // Relación completa para usar en la vista
-                })
-                .ToPagedList(pageNumber, pageSize); // Aplicar paginación
+            // Armamos la consulta con el orden y demás
+            var query = _context.compras
+                .OrderByDescending(c => c.fecha)
+                .Include(c => c.cliente)
+                .AsNoTracking();
 
-            return View(compras);
+            // Obtenemos el total de elementos para la paginación
+            int totalItems = query.Count();
+
+            // Aplicamos skip y take para traer solo la página actual
+            var comprasList = query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            // Creamos un StaticPagedList que implementa IPagedList<Compra>
+            var pagedCompras = new StaticPagedList<Compra>(comprasList, pageNumber, pageSize, totalItems);
+
+            return View(pagedCompras);
         }
 
         public IActionResult Create()
@@ -56,9 +60,12 @@ namespace SODERIA_I.Controllers
             // Definir tipos de compra
             var tiposCompra = new List<dynamic>
     {
-        new { Id = 1, Tipo = "Bidón 12 litros", Precio = 100 },
-        new { Id = 2, Tipo = "Bidón 20 litros", Precio = 150 },
-        new { Id = 3, Tipo = "Sifón", Precio = 200 }
+        new { Id = 1, Tipo = "Bidón 12 litros", Precio = 1500 },
+        new { Id = 2, Tipo = "Bidón 20 litros", Precio = 2500 },
+        new { Id = 3, Tipo = "Sifón", Precio = 500 },
+        new { Id = 4, Tipo = "12 litros (Reparto)", Precio = 1700},
+        new { Id = 5, Tipo = "20 litros (Reparto)", Precio = 2800},
+        new { Id = 6, Tipo = "Sifón (Reparto)", Precio = 600}
     };
 
             // Crear el ViewModel
@@ -81,9 +88,12 @@ namespace SODERIA_I.Controllers
             var cliente = _context.clientes.FirstOrDefault(c => c.Id == compra.clienteId);
             var tipoCompra = new List<dynamic>
     {
-        new { Id = 1, Tipo = "Bidón 12 litros", Precio = 100 },
-        new { Id = 2, Tipo = "Bidón 20 litros", Precio = 150 },
-        new { Id = 3, Tipo = "Sifón", Precio = 200 }
+        new { Id = 1, Tipo = "Bidón 12 litros", Precio = 1500 },
+        new { Id = 2, Tipo = "Bidón 20 litros", Precio = 2500 },
+        new { Id = 3, Tipo = "Sifón", Precio = 500 },
+        new { Id = 4, Tipo = "12 litros (Reparto)", Precio = 1700},
+        new { Id = 5, Tipo = "20 litros (Reparto)", Precio = 2800},
+        new { Id = 6, Tipo = "Sifón (Reparto)", Precio = 600}
     }.FirstOrDefault(t => t.Id == compra.TipoCompraId);
 
             if (cliente == null || tipoCompra == null)
@@ -119,43 +129,127 @@ namespace SODERIA_I.Controllers
             {
                 return NotFound();
             }
-            ViewData["clienteId"] = new SelectList(_context.clientes, "Id", "apellido", compra.clienteId);
+
+            // Asumiendo que el precio se determina según el TipoCompraId:
+            decimal precio = 0;
+            switch (compra.TipoCompraId)
+            {
+                case 1:
+                    precio = 1500;
+                    break;
+                case 2:
+                    precio = 2500;
+                    break;
+                case 3:
+                    precio = 500;
+                    break;
+                // Agregar más casos si es necesario
+                case 4:
+                    precio = 1700;
+                    break;
+                case 5:
+                    precio = 2800;
+                    break;
+                case 6:
+                    precio = 600;
+                    break;
+                default:
+                    precio = 0;
+                    break;
+            }
+
+            // Calcular el monto actual con la cantidad existente
+            compra.Monto = precio * compra.Cantidad;
+
+            // Podés pasar también el precio a la vista usando ViewBag o un campo oculto en el modelo, por ejemplo:
+            ViewBag.Precio = precio;
+
             return View(compra);
         }
 
-        // POST: Compras/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,clienteId,fecha,TipoCompraId,Cantidad,Monto,ClienteNombre")] Compra compra)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Cantidad")] Compra compra)
         {
             if (id != compra.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            // Buscar la compra existente en la base de datos
+            var existingCompra = await _context.compras.FindAsync(id);
+            if (existingCompra == null)
             {
-                try
-                {
-                    _context.Update(compra);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CompraExists(compra.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            ViewData["clienteId"] = new SelectList(_context.clientes, "Id", "apellido", compra.clienteId);
+
+            // Actualizar la cantidad
+            existingCompra.Cantidad = compra.Cantidad;
+
+            // Calcular el precio basado en el TipoCompraId
+            decimal precio = 0;
+            switch (existingCompra.TipoCompraId)
+            {
+                case 1:
+                    precio = 1500;
+                    break;
+                case 2:
+                    precio = 2500;
+                    break;
+                case 3:
+                    precio = 500;
+                    break;
+                case 4: //12 reparto
+                    precio = 1700;
+                    break;
+                case 5: //20 reparto
+                    precio = 2800;
+                    break;
+                case 6: //sifon reparto
+                    precio = 600;
+                    break;
+            }
+
+            // Recalcular el monto total
+            existingCompra.Monto = precio * compra.Cantidad;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CompraExists(compra.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "La compra ha sido modificada por otro usuario. Por favor, refresca la página e intenta nuevamente.");
+                    return View(compra);
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var compra = await _context.compras
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (compra == null)
+            {
+                return NotFound();
+            }
+
             return View(compra);
         }
 

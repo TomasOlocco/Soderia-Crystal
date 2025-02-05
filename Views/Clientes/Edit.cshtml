@@ -1,45 +1,51 @@
 @model SODERIA_I.Models.Cliente
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar";
 }
 
-<h1>Edit</h1>
+<div class="container m-3 mb-5">
+    <!-- Agregué mb-5 para margen inferior -->
+    <h1>Editar</h1>
+    <h5>Edición de Cliente</h5>
+    <hr />
 
-<h4>Cliente</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="zona" class="control-label"></label>
-                <input asp-for="zona" class="form-control" />
-                <span asp-validation-for="zona" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="nombre" class="control-label"></label>
-                <input asp-for="nombre" class="form-control" />
-                <span asp-validation-for="nombre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="apellido" class="control-label"></label>
-                <input asp-for="apellido" class="form-control" />
-                <span asp-validation-for="apellido" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="Telefono">Teléfono</label>
-                <input type="text" class="form-control" id="Telefono" name="Telefono" value="@Model.Telefono" required>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Guardar" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="zona" />
+
+                <!-- Campo Nombre -->
+                <div class="form-group mb-3">
+                    <label asp-for="nombre" class="control-label"></label>
+                    <input asp-for="nombre" class="form-control" />
+                    <span asp-validation-for="nombre" class="text-danger"></span>
+                </div>
+
+                <!-- Campo Apellido -->
+                <div class="form-group mb-3">
+                    <label asp-for="apellido" class="control-label"></label>
+                    <input asp-for="apellido" class="form-control" />
+                    <span asp-validation-for="apellido" class="text-danger"></span>
+                </div>
+
+                <!-- Campo Teléfono -->
+                <div class="form-group mb-3">
+                    <label for="Telefono" class="control-label">Teléfono</label>
+                    <input type="text" class="form-control" id="Telefono" name="Telefono" value="@Model.Telefono" required>
+                </div>
+
+                <hr />
+
+                <!-- Botón Guardar -->
+                <div class="form-group">
+                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>
+                    <hr />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-

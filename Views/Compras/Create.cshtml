@@ -1,75 +1,83 @@
 @model SODERIA_I.ViewModels.CompraViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Registrar Compra";
 }
 
-<h1>Create</h1>
+<div class="container m-3 mb-5">
+    <!-- Agregué mb-5 para margen inferior -->
+    <h1>Registrar Compra</h1>
+    <hr />
 
-<h4>Compra</h4>
-<hr />
+    <form asp-action="Create" method="post">
+        <!-- Zona de filtro -->
+        <div class="form-group mb-3">
+            <label for="zonaFiltro">Seleccione una zona:</label>
+            <select id="zonaFiltro" class="form-control" onchange="filtrarClientesPorZona()">
+                <option value="">Seleccione una zona</option>
+                @foreach (var zona in Model.Clientes.Select(c => c.zona).Distinct())
+                {
+                    <option value="@zona">@zona</option>
+                }
+            </select>
+        </div>
 
-<form asp-action="Create" method="post">
-    <!-- Zona de filtro -->
-    <div class="form-group">
-        <label for="zonaFiltro">Seleccione una zona:</label>
-        <select id="zonaFiltro" class="form-control" onchange="filtrarClientesPorZona()">
-            <option value="">Seleccione una zona</option>
-            @foreach (var zona in Model.Clientes.Select(c => c.zona).Distinct())
-            {
-                <option value="@zona">@zona</option>
-            }
-        </select>
-    </div>
+        <!-- Dropdown para seleccionar cliente -->
+        <div class="form-group mb-3">
+            <label for="ClienteId">Seleccione un cliente:</label>
+            <select name="ClienteId" class="form-control" id="clientesDropdown">
+                <option value="">Seleccione un cliente</option>
+                @foreach (var cliente in Model.Clientes)
+                {
+                    <option value="@cliente.Id" data-zona="@cliente.zona">
+                        @($"{cliente.nombre} {cliente.apellido}")
+                    </option>
+                }
+            </select>
+        </div>
 
-    <!-- Dropdown para seleccionar cliente -->
-    <div class="form-group">
-        <label for="ClienteId">Seleccione un cliente:</label>
-        <select name="ClienteId" class="form-control" id="clientesDropdown">
-            <option value="">Seleccione un cliente</option>
-            @foreach (var cliente in Model.Clientes)
-            {
-                <option value="@cliente.Id" data-zona="@cliente.zona">
-                    @($"{cliente.nombre} {cliente.apellido}")
-                </option>
-            }
-        </select>
-    </div>
+        <!-- Dropdown para seleccionar tipo de compra -->
+        <div class="form-group mb-3">
+            <label for="TipoCompraId">Seleccione un tipo de compra:</label>
+            <select name="TipoCompraId" class="form-control" id="TipoCompraId" onchange="calcularMonto()">
+                <option value="">Seleccione un tipo de compra</option>
+                @foreach (var tipo in Model.TiposCompra)
+                {
+                    <option value="@tipo.Id" data-precio="@tipo.Precio">
+                        @tipo.Tipo (@tipo.Precio.ToString("C"))
+                    </option>
+                }
+            </select>
+        </div>
 
-    <!-- Dropdown para seleccionar tipo de compra -->
-    <div class="form-group">
-        <label for="TipoCompraId">Seleccione un tipo de compra:</label>
-        <select name="TipoCompraId" class="form-control" id="TipoCompraId" onchange="calcularMonto()">
-            <option value="">Seleccione un tipo de compra</option>
-            @foreach (var tipo in Model.TiposCompra)
-            {
-                <option value="@tipo.Id" data-precio="@tipo.Precio">
-                    @tipo.Tipo (@tipo.Precio.ToString("C"))
-                </option>
-            }
-        </select>
-    </div>
+        <!-- Fecha -->
+        <div class="form-group mb-3">
+            <label for="Fecha">Fecha:</label>
+            <input name="Fecha" type="date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+        </div>
 
-    <!-- Fecha -->
-    <div class="form-group">
-        <label for="Fecha">Fecha:</label>
-        <input name="Fecha" type="date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")"/>
-    </div>
+        <!-- Campo para cantidad -->
+        <div class="form-group mb-3">
+            <label for="Cantidad">Cantidad:</label>
+            <input name="Cantidad" class="form-control" type="number" min="1" onchange="calcularMonto()" />
+        </div>
 
-    <!-- Campo para cantidad -->
-    <div class="form-group">
-        <label for="Cantidad">Cantidad:</label>
-        <input name="Cantidad" class="form-control" type="number" min="1" onchange="calcularMonto()" />
-    </div>
+        <!-- Campo para monto calculado -->
+        <div class="form-group mb-3">
+            <label for="Monto">Monto Final:</label>
+            <input name="Monto" class="form-control" type="text" readonly />
+        </div>
 
-    <!-- Campo para monto calculado -->
-    <div class="form-group">
-        <label for="Monto">Monto Final:</label>
-        <input name="Monto" class="form-control" type="text" readonly />
-    </div>
+        <hr />
 
-    <button type="submit" class="btn btn-primary">Guardar</button>
-</form>
+        <!-- Botón Guardar -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>
+        </div>
+        <hr />
+    </form>
+</div>
 
 <script>
     function filtrarClientesPorZona() {
@@ -99,9 +107,3 @@
         montoInput.value = montoTotal.toFixed(2);
     }
 </script>
-
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-

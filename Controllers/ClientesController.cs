@@ -23,14 +23,25 @@ namespace SODERIA_I.Controllers
         }
 
         // GET: Clientes
-        public async Task<IActionResult> Index(int? page)
+        public IActionResult Index(int? page)
         {
-            int pageSize = 3; 
-            int pageNumber = (page ?? 1); 
+            int pageSize = 4;
+            int pageNumber = page ?? 1;
 
-            var clientes = _context.clientes.ToPagedList(pageNumber, pageSize);
+            var query = _context.clientes
+                .OrderBy(c => c.nombre)
+                .AsNoTracking();
 
-            return View(clientes);
+            int totalItems = query.Count();
+
+            var clientesList = query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var pagedClientes = new StaticPagedList<Cliente>(clientesList, pageNumber, pageSize, totalItems);
+
+            return View(pagedClientes);
         }
 
         // GET: Clientes/Details/5
@@ -129,7 +140,7 @@ namespace SODERIA_I.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,zona,nombre,apellido")] Cliente cliente)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,nombre,apellido,Telefono,zona")] Cliente cliente)
         {
             if (id != cliente.Id)
             {
@@ -140,6 +151,17 @@ namespace SODERIA_I.Controllers
             {
                 try
                 {
+                    // Recuperar el cliente original de la base de datos para no perder valores
+                    var clienteOriginal = await _context.clientes.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+                    if (clienteOriginal == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Mantener el valor de zona
+                    cliente.zona = clienteOriginal.zona;
+
+                    // Actualizar la base de datos
                     _context.Update(cliente);
                     await _context.SaveChangesAsync();
                 }

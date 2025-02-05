@@ -5,12 +5,16 @@
       "PackagePath": "staticwebassets\\SODERIA_I.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\bidon.png",
+      "PackagePath": "staticwebassets\\bidon.png"
+    },
+    {
       "Id": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
-      "Id": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\facturas\\Juan_Rodriguez_01_25.pdf",
-      "PackagePath": "staticwebassets\\facturas\\Juan_Rodriguez_01_25.pdf"
+      "Id": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\facturas\\Juan_Perez_02_2025.pdf",
+      "PackagePath": "staticwebassets\\facturas\\Juan_Perez_02_2025.pdf"
     },
     {
       "Id": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\favicon.ico",

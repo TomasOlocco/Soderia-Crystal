@@ -1,57 +1,71 @@
 @model SODERIA_I.Models.Cliente
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Registrar Cliente";
 }
 
-<h1>Create</h1>
+<div class="container m-3 mb-5">
+    <!-- Agregué mb-5 para margen inferior -->
+    <h1>Registrar Cliente</h1>
+    <hr />
 
-<h4>Cliente</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" method="post">
-            <div class="form-group">
-                <label asp-for="nombre"></label>
-                <input asp-for="nombre" class="form-control" />
-                <span asp-validation-for="nombre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="apellido"></label>
-                <input asp-for="apellido" class="form-control" />
-                <span asp-validation-for="apellido" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="zona"></label>
-                <select asp-for="zona" class="form-control">
-                    <option value="">Seleccione una zona</option>
-                    @foreach (var zona in ViewBag.Zonas as List<string>)
-                    {
-                        <option value="@zona">@zona</option>
-                    }
-                </select>
-                <span asp-validation-for="zona" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Telefono" class="control-label">Teléfono</label>
-                <input asp-for="Telefono" class="form-control" placeholder="Ej: 3576576464 o +54 9 3576576464" />
-                <span asp-validation-for="Telefono" class="text-danger"></span>
-            </div>
-            <button type="submit" class="btn btn-primary">Guardar</button>
-        </form>
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Aumenté el ancho del formulario para mejor uso del espacio -->
+            <form asp-action="Create" method="post">
+                <!-- Campo Nombre -->
+                <div class="form-group mb-3">
+                    <label asp-for="nombre" class="control-label"></label>
+                    <input asp-for="nombre" class="form-control" />
+                    <span asp-validation-for="nombre" class="text-danger"></span>
+                </div>
+
+                <!-- Campo Apellido -->
+                <div class="form-group mb-3">
+                    <label asp-for="apellido" class="control-label"></label>
+                    <input asp-for="apellido" class="form-control" />
+                    <span asp-validation-for="apellido" class="text-danger"></span>
+                </div>
+
+                <!-- Campo Zona -->
+                <div class="form-group mb-3">
+                    <label asp-for="zona" class="control-label"></label>
+                    <select asp-for="zona" class="form-control">
+                        <option value="">Seleccione una zona</option>
+                        @foreach (var zona in ViewBag.Zonas as List<string>)
+                        {
+                            <option value="@zona">@zona</option>
+                        }
+                    </select>
+                    <span asp-validation-for="zona" class="text-danger"></span>
+                </div>
+
+                <!-- Campo Teléfono -->
+                <div class="form-group mb-3">
+                    <label asp-for="Telefono" class="control-label">Teléfono</label>
+                    <input asp-for="Telefono" class="form-control" placeholder="Ej: 3576576464 o +54 9 3576576464" />
+                    <span asp-validation-for="Telefono" class="text-danger"></span>
+                </div>
+
+                <hr />
+
+                <!-- Botón Guardar -->
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const telefonoInput = document.querySelector("#Telefono");
 
-        telefonoInput.addEventListener("input", function() {
+        telefonoInput.addEventListener("input", function () {
             // Reemplaza espacios y guiones en tiempo real
             this.value = this.value.replace(/[-\s()]/g, "");
         });
     });
 </script>
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
