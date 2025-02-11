@@ -1,0 +1,45 @@
+{
+  "name": "Soderia Crystal",
+  "short_name": "Soderia",
+  "description": "Tu aplicación web progresiva.",
+  "icons": [
+    {
+      "src": "/icons/bidon-x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/bidon-x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/bidon-x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/icons/soderia-desktop_I",
+      "sizes": "1750x768",
+      "type": "image/png",
+      "platform": "desktop"
+    },
+    {
+      "src": "/icons/soderia-mobile_I",
+      "sizes": "640x1231",
+      "type": "image/png",
+      "platform": "mobile"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
+
+

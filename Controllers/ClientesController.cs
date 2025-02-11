@@ -10,12 +10,19 @@ using SODERIA_I.Models;
 using X.PagedList;
 using X.PagedList.Mvc.Core;
 using X.PagedList.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SODERIA_I.Controllers
 {
+    [Authorize]
     public class ClientesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly List<string> _usuariosAutorizados = new List<string>
+    {
+        "tomasolocco04@gmail.com",
+        "gustavoolocco@hotmail.com"
+    };
 
         public ClientesController(ApplicationDbContext context)
         {
@@ -25,11 +32,17 @@ namespace SODERIA_I.Controllers
         // GET: Clientes
         public IActionResult Index(int? page)
         {
+            // Verifica que el usuario autenticado esté en la lista de autorizados
+            if (!_usuariosAutorizados.Contains(User.Identity.Name))
+            {
+                return Forbid(); // Bloquea el acceso
+            }
+
             int pageSize = 4;
             int pageNumber = page ?? 1;
 
             var query = _context.clientes
-                .OrderBy(c => c.nombre)
+                .OrderByDescending(c => c.nombre)
                 .AsNoTracking();
 
             int totalItems = query.Count();

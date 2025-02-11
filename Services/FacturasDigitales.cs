@@ -26,7 +26,7 @@ namespace SODERIA_I.Services
                     // Aplicar "Josefin Sans" al título
                     page.Header()
                         .AlignCenter()
-                        .Text("Soderia Crystal")
+                        .Text("Sodería Crystal")
                         .FontSize(35)
                         .FontFamily("Josefin Sans")
                         .Bold();
@@ -82,7 +82,7 @@ namespace SODERIA_I.Services
 
                     page.Footer()
                         .AlignCenter()
-                        .Text("Muchas gracias por su compra. Soderia Crystal");
+                        .Text("Muchas gracias por su compra. Sodería Crystal");
                 });
             });
 

@@ -21,6 +21,26 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\icons\\bidon-x144.png",
+      "PackagePath": "staticwebassets\\icons\\bidon-x144.png"
+    },
+    {
+      "Id": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\icons\\bidon-x192.png",
+      "PackagePath": "staticwebassets\\icons\\bidon-x192.png"
+    },
+    {
+      "Id": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\icons\\bidon-x512.png",
+      "PackagePath": "staticwebassets\\icons\\bidon-x512.png"
+    },
+    {
+      "Id": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\icons\\soderia-desktop_I.png",
+      "PackagePath": "staticwebassets\\icons\\soderia-desktop_I.png"
+    },
+    {
+      "Id": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\icons\\soderia-mobile_I.png",
+      "PackagePath": "staticwebassets\\icons\\soderia-mobile_I.png"
+    },
+    {
       "Id": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },
@@ -251,6 +271,14 @@
     {
       "Id": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\manifest.json",
+      "PackagePath": "staticwebassets\\manifest.json"
+    },
+    {
+      "Id": "C:\\Users\\Notebook\\source\\repos\\SODERIA_I\\wwwroot\\sw.js",
+      "PackagePath": "staticwebassets\\sw.js"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.SODERIA_I.Microsoft.AspNetCore.StaticWebAssets.props",

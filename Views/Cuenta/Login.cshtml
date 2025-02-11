@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Iniciar sesión";
+}
+
+<div class="container mt-5">
+    <!-- Agregué mt-5 para margen superior -->
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-center">Iniciar sesión</h2>
+            <hr />
+
+            <!-- Mensaje de error -->
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    @ViewBag.Error
+                </div>
+            }
+
+            <!-- Formulario de inicio de sesión -->
+            <form method="post">
+                <!-- Campo Email -->
+                <div class="form-group mb-3">
+                    <label for="email">Email:</label>
+                    <input type="email" name="email" class="form-control" required />
+                </div>
+
+                <!-- Campo Contraseña -->
+                <div class="form-group mb-3">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" name="password" class="form-control" required />
+                </div>
+
+                <!-- Botón de enviar -->
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary">Ingresar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

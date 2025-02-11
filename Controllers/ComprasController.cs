@@ -10,12 +10,20 @@ using SODERIA_I.Models;
 using SODERIA_I.ViewModels;
 using X.PagedList;
 using X.PagedList.Extensions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace SODERIA_I.Controllers
 {
+    [Authorize]
     public class ComprasController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly List<string> _usuariosAutorizados = new List<string>
+    {
+        "tomasolocco04@gmail.com",
+        "gustavoolocco@hotmail.com"
+    };
 
         public ComprasController(ApplicationDbContext context)
         {
@@ -24,6 +32,12 @@ namespace SODERIA_I.Controllers
 
         public IActionResult Index(int? page)
         {
+            // Verifica que el usuario autenticado esté en la lista de autorizados
+            if (!_usuariosAutorizados.Contains(User.Identity.Name))
+            {
+                return Forbid(); // Bloquea el acceso
+            }
+
             int pageSize = 5;
             int pageNumber = page ?? 1;
 

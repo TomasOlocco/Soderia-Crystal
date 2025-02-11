@@ -323,3 +323,14 @@ C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\out\appsettings.json
 C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\out\SODERIA_I.deps.json
 C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\out\SODERIA_I.runtimeconfig.json
 C:\Users\Notebook\source\repos\SODERIA_I\obj\Debug\net8.0\SODERIA_I.sourcelink.json
+C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\Azure.Storage.Blobs.dll
+C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\Azure.Storage.Common.dll
+C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\System.IO.Hashing.dll
+C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
+C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\Microsoft.Extensions.ObjectPool.dll
+C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\Microsoft.Extensions.WebEncoders.dll
+C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\System.Security.Cryptography.Xml.dll
+C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\Notebook\source\repos\SODERIA_I\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll

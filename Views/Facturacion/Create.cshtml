@@ -136,7 +136,7 @@
         <!-- Botón para descargar la factura -->
         <div class="mt-3">
             <a asp-controller="Facturacion" asp-action="GenerarFactura" asp-route-clienteId="@Model.ClienteIdSeleccionado" asp-route-totalFactura="@montoTotal" asp-route-detalleCompras='@Newtonsoft.Json.JsonConvert.SerializeObject(Model.ComprasDelUltimoMes)' class="btn btn-primary">
-                Descargar Factura
+                Descargar Boleta
             </a>
             <hr />
         </div>

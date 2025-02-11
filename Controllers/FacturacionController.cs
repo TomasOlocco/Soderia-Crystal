@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -6,23 +7,44 @@ using SODERIA_I.Data;
 using SODERIA_I.Models;
 using SODERIA_I.Services;
 using SODERIA_I.ViewModels;
+using Azure.Storage.Sas;
+using Microsoft.AspNetCore.Authorization;
 using static SODERIA_I.ViewModels.CompraViewModel;
 
 namespace SODERIA_I.Controllers
 {
+    [Authorize]
     public class FacturacionController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly FacturasDigitales _FacturasDigitales;
+        private readonly AzureBlobStorageService _blobStorageService;
+        private readonly List<string> _usuariosAutorizados = new List<string>
+    {
+        "tomasolocco04@gmail.com",
+        "gustavoolocco@hotmail.com"
+    };
 
-        public FacturacionController(ApplicationDbContext context, FacturasDigitales facturaPdfService)
+        public FacturacionController(
+            ApplicationDbContext context,
+            FacturasDigitales facturaPdfService,
+            AzureBlobStorageService blobStorageService)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _FacturasDigitales = facturaPdfService ?? throw new ArgumentNullException(nameof(facturaPdfService));
+            _blobStorageService = blobStorageService ?? throw new ArgumentNullException(nameof(blobStorageService));
         }
 
-        public IActionResult GenerarFactura(int clienteId)
+
+        // Método para subir una factura
+        public async Task<IActionResult> GenerarFactura(int clienteId)
         {
+            // Verifica que el usuario autenticado esté en la lista de autorizados
+            if (!_usuariosAutorizados.Contains(User.Identity.Name))
+            {
+                return Forbid(); // Bloquea el acceso
+            }
+
             // Obtener el cliente real de la base de datos
             var clienteObj = _context.clientes.FirstOrDefault(c => c.Id == clienteId);
             if (clienteObj == null)
@@ -38,17 +60,17 @@ namespace SODERIA_I.Controllers
                 {
                     tipoCompra = c.TipoCompraId == 1 ? "Bidón 12 litros" :
                                  c.TipoCompraId == 2 ? "Bidón 20 litros" :
-                                 c.TipoCompraId == 3 ? "Sifón" : 
+                                 c.TipoCompraId == 3 ? "Sifón" :
                                  c.TipoCompraId == 4 ? "12 litros (Reparto)" :
                                  c.TipoCompraId == 5 ? "20 litros (Reparto)" :
-                                 c.TipoCompraId == 6 ? "Sifón (Reparto)" : "Desconocido" ,
+                                 c.TipoCompraId == 6 ? "Sifón (Reparto)" : "Desconocido",
                     cantidad = Convert.ToInt32(c.Cantidad),
                     precio = c.TipoCompraId == 1 ? 1500m :
                              c.TipoCompraId == 2 ? 2500m :
-                             c.TipoCompraId == 3 ? 500m : 
+                             c.TipoCompraId == 3 ? 500m :
                              c.TipoCompraId == 4 ? 1700m :
                              c.TipoCompraId == 5 ? 2800m :
-                             c.TipoCompraId == 6 ? 600 : 0m
+                             c.TipoCompraId == 6 ? 600m : 0m
                 })
                 .ToList();
 
@@ -61,27 +83,39 @@ namespace SODERIA_I.Controllers
             // Generar el PDF con el servicio de facturas digitales
             var pdfBytes = _FacturasDigitales.GenerarFactura(clienteNombre, detalleCompras, total);
 
-            // Asegurar la existencia de la carpeta wwwroot/facturas
-            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "facturas");
-            if (!Directory.Exists(folderPath))
-                Directory.CreateDirectory(folderPath);
-
-            // Construir el nombre del archivo reemplazando espacios
+            // Nombre del archivo PDF
             var fileName = $"{clienteNombre.Replace(" ", "_")}_{DateTime.Now:MM_yyyy}.pdf";
-            var filePath = Path.Combine(folderPath, fileName);
 
-            // Guardar el PDF en la carpeta
-            System.IO.File.WriteAllBytes(filePath, pdfBytes);
+            // Subir el PDF a Azure Blob Storage
+            using (var stream = new MemoryStream(pdfBytes))
+            {
+                await _blobStorageService.UploadFileAsync("facturas", fileName, stream);
+            }
 
-            // Construir la URL pública de la factura
-            var urlFactura = $"{Request.Scheme}://{Request.Host}/facturas/{fileName}";
+            // Obtener la cadena de conexión del blob storage (esto depende de cómo esté implementado tu servicio)
+            string connectionString = _blobStorageService.GetConnectionString(); // O, si está en la configuración, recuperala
+
+            // Instanciar el BlobContainerClient para el contenedor "facturas"
+            BlobContainerClient containerClient = new BlobContainerClient(connectionString, "facturas");
+
+            // Obtener el BlobClient para el archivo subido
+            BlobClient blobClient = containerClient.GetBlobClient(fileName);
+
+            // Generar un SAS URI con permisos de lectura, válido por 1 hora
+            Uri sasUri = blobClient.GenerateSasUri(
+                BlobSasPermissions.Read,
+                DateTimeOffset.UtcNow.AddHours(48)
+            );
+
+            // Ahora, en lugar de construir la URL manualmente, usamos la SAS URI
+            var urlFactura = sasUri.ToString();
 
             // Verificar que el cliente tenga un número de WhatsApp válido
             if (string.IsNullOrWhiteSpace(numeroWhatsAppCliente))
                 return BadRequest("El cliente no tiene un número de WhatsApp registrado.");
 
             // Preparar el mensaje para WhatsApp
-            string mensaje = $"Hola {clienteNombre}, tu factura del mes ya está disponible. Descárgala aquí: {urlFactura}";
+            string mensaje = $"Hola {clienteNombre}, su boleta del mes ya está disponible. Descárgala aquí: {urlFactura}";
             string mensajeCodificado = System.Net.WebUtility.UrlEncode(mensaje);
             string urlWhatsApp = $"https://wa.me/{numeroWhatsAppCliente}?text={mensajeCodificado}";
 
