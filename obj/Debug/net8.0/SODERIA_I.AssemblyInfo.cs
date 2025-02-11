@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SODERIA_I")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8e5e150a839c0352cc109ec6a95fcd17efe3d54f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+22f615919b9da7ab6ce218164e70c7218da41ca3")]
 [assembly: System.Reflection.AssemblyProductAttribute("SODERIA_I")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SODERIA_I")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
